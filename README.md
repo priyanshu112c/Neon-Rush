@@ -4,6 +4,8 @@
 > Explore a 3600 × 2600 neon wasteland, fight hostile machines with auto-aiming weapons,
 > complete mission objectives, level up your rank and extract before your hull is destroyed.
 
+DEMO ----------- [https://neon-rush-io.netlify.app/]
+
 Built from scratch with **TypeScript** and the **Canvas 2D API** — **zero runtime dependencies**, **100% procedural art & audio**.
 
 ---

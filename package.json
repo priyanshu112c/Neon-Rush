@@ -1,0 +1,17 @@
+{
+  "name": "neon-rush",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Neon Rush — a futuristic neon arcade survival game.",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.3",
+    "vite": "^5.4.11"
+  }
+}

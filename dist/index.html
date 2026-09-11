@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
+    />
+    <meta name="theme-color" content="#05060f" />
+    <title>Neon Rush — Open World</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <script type="module" crossorigin src="./assets/index-D6Rafqm-.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-B_xH-VdG.css">
+  </head>
+  <body>
+    <div id="app">
+      <div id="stage">
+        <canvas id="game-canvas"></canvas>
+      </div>
+      <div id="vignette" aria-hidden="true"></div>
+
+      <!-- HUD -->
+      <header id="hud" class="hidden">
+        <div class="hud-panel hud-left">
+          <div class="hud-item">
+            <span class="hud-label">SCORE</span>
+            <span class="hud-value hud-value--cyan" id="hud-score">0</span>
+          </div>
+          <div class="hud-item">
+            <span class="hud-label">BEST</span>
+            <span class="hud-value hud-value--gold" id="hud-high">0</span>
+          </div>
+          <div class="hud-item">
+            <span class="hud-label">LEVEL</span>
+            <span class="hud-value hud-value--magenta" id="hud-level">1</span>
+          </div>
+        </div>
+
+        <div class="hud-panel hud-center">
+          <div class="hud-item hud-combo" id="hud-combo-wrap">
+            <span class="hud-label">COMBO</span>
+            <span class="hud-value hud-value--green" id="hud-combo">1x</span>
+          </div>
+          <div class="hud-item">
+            <span class="hud-label">XP</span>
+            <span class="hud-value" id="hud-xp">0</span>
+          </div>
+          <div class="hud-item">
+            <span class="hud-label">TIME</span>
+            <span class="hud-value" id="hud-time">0:00</span>
+          </div>
+        </div>
+
+        <div class="hud-panel hud-right">
+          <button class="icon-btn" id="btn-sound" aria-label="Toggle sound">🔊</button>
+          <button class="icon-btn" id="btn-pause" aria-label="Pause">❚❚</button>
+        </div>
+      </header>
+
+      <!-- Objective panel -->
+      <aside id="objective-panel" class="hidden">
+        <div class="obj-head">CURRENT OBJECTIVE</div>
+        <div class="obj-title" id="obj-title">—</div>
+        <div class="obj-desc" id="obj-desc"></div>
+        <div class="obj-progress"><span id="obj-progress">0 / 0</span></div>
+        <div class="obj-bar"><div class="obj-bar-fill" id="obj-bar-fill"></div></div>
+        <div class="obj-queue" id="obj-queue"></div>
+      </aside>
+
+      <!-- Health bar -->
+      <div id="health-wrap" class="hidden">
+        <div class="health-label">HULL</div>
+        <div class="health-bar"><div class="health-fill" id="health-fill"></div></div>
+      </div>
+
+      <!-- Minimap -->
+      <div id="minimap-wrap" class="hidden">
+        <canvas id="minimap" width="168" height="168"></canvas>
+        <div class="minimap-compass" id="minimap-arrow">▲</div>
+      </div>
+
+      <!-- Objective flash -->
+      <div id="objective-flash" class="hidden">✓ OBJECTIVE COMPLETE</div>
+
+      <!-- Main menu -->
+      <div id="menu" class="screen">
+        <div class="menu-inner">
+          <div class="title-block">
+            <h1 class="title">NEON<span>RUSH</span></h1>
+            <p class="subtitle">EXPLORE. FIGHT. SURVIVE.</p>
+          </div>
+          <button class="btn btn--primary" id="btn-start">START MISSION</button>
+          <div class="menu-info">
+            <div class="info-card">
+              <span class="info-label">HIGH SCORE</span>
+              <span class="info-value" id="menu-high">0</span>
+            </div>
+            <div class="info-card">
+              <span class="info-label">XP</span>
+              <span class="info-value" id="menu-xp">0</span>
+            </div>
+            <div class="info-card">
+              <span class="info-label">RANK</span>
+              <span class="info-value" id="menu-rank">1</span>
+            </div>
+            <div class="info-card info-card--wide">
+              <span class="info-label">CONTROLS</span>
+              <span class="controls-row">
+                <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd>
+                <em>or</em>
+                <kbd>←</kbd><kbd>↑</kbd><kbd>↓</kbd><kbd>→</kbd>
+                <em>or</em> drag / touch
+              </span>
+            </div>
+            <div class="info-card info-card--wide">
+              <span class="info-label">OBJECTIVE</span>
+              <span class="info-text">
+                Explore the open world, complete mission objectives, fight hostile
+                machines and extract. Your weapon fires automatically.
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pause -->
+      <div id="pause" class="screen hidden">
+        <div class="overlay-card">
+          <h2 class="overlay-title">PAUSED</h2>
+          <button class="btn btn--primary" id="btn-resume">RESUME</button>
+          <button class="btn btn--ghost" id="btn-restart">RESTART LEVEL</button>
+          <button class="btn btn--ghost" id="btn-pause-menu">MAIN MENU</button>
+        </div>
+      </div>
+
+      <!-- Level intro -->
+      <div id="level-intro" class="screen hidden">
+        <div class="overlay-card intro-card">
+          <div class="intro-level" id="intro-level">LEVEL 01</div>
+          <h2 class="intro-name" id="intro-name">FIRST CONTACT</h2>
+          <p class="intro-desc" id="intro-desc"></p>
+          <div class="intro-objectives">
+            <span class="info-label">OBJECTIVES</span>
+            <ul id="intro-objectives"></ul>
+          </div>
+          <button class="btn btn--primary" id="btn-begin">BEGIN</button>
+        </div>
+      </div>
+
+      <!-- Level complete -->
+      <div id="level-complete" class="screen hidden">
+        <div class="overlay-card overlay-card--go">
+          <h2 class="overlay-title overlay-title--win">MISSION COMPLETE</h2>
+          <div class="stats-grid">
+            <div class="stat">
+              <span class="stat-label">ENEMIES</span>
+              <span class="stat-value stat-value--cyan" id="mc-kills">0</span>
+            </div>
+            <div class="stat">
+              <span class="stat-label">TIME</span>
+              <span class="stat-value" id="mc-time">0:00</span>
+            </div>
+            <div class="stat">
+              <span class="stat-label">OBJECTIVES</span>
+              <span class="stat-value stat-value--green" id="mc-objectives">0 / 0</span>
+            </div>
+            <div class="stat">
+              <span class="stat-label">REWARD XP</span>
+              <span class="stat-value stat-value--gold" id="mc-reward">0</span>
+            </div>
+          </div>
+          <div class="btn-row">
+            <button class="btn btn--primary" id="btn-next">NEXT LEVEL</button>
+            <button class="btn btn--ghost" id="btn-mc-menu">MAIN MENU</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Game over -->
+      <div id="gameover" class="screen hidden">
+        <div class="overlay-card overlay-card--go">
+          <h2 class="overlay-title overlay-title--go">HULL DESTROYED</h2>
+          <div class="new-high hidden" id="new-high">★ NEW HIGH SCORE ★</div>
+          <div class="stats-grid">
+            <div class="stat">
+              <span class="stat-label">SCORE</span>
+              <span class="stat-value stat-value--cyan" id="go-score">0</span>
+            </div>
+            <div class="stat">
+              <span class="stat-label">HIGH SCORE</span>
+              <span class="stat-value stat-value--gold" id="go-high">0</span>
+            </div>
+            <div class="stat">
+              <span class="stat-label">SURVIVED</span>
+              <span class="stat-value" id="go-time">0:00</span>
+            </div>
+            <div class="stat">
+              <span class="stat-label">ENEMIES</span>
+              <span class="stat-value stat-value--green" id="go-kills">0</span>
+            </div>
+          </div>
+          <div class="btn-row">
+            <button class="btn btn--primary" id="btn-again">RETRY LEVEL</button>
+            <button class="btn btn--ghost" id="btn-menu">MAIN MENU</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mobile touch controls -->
+      <div id="joystick-layer" aria-hidden="true">
+        <div id="joystick-base">
+          <div id="joystick-knob"></div>
+        </div>
+      </div>
+
+    </div>
+  </body>
+</html>
